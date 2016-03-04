@@ -1,20 +1,45 @@
-var express = require('express');
-var app = express();
-
-app.set('port', (process.env.PORT || 5000));
-
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-app.get('/', function(request, response) {
-  response.render('pages/index');
+// Create server with default options
+var request = require('request');
+var server = require('contentful-webhook-server')({
+  path: '/',
+  username: 'user',
+  password: 'pass'
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+
+var options = {
+  url: 'https://app.wercker.com/api/v3/builds/',
+  headers: {
+    'applicationId': '56d934359d5cf1b5731e6d1d'
+  }
+};
+
+
+server.on('ContentManagement.error', function(err, req){
+  console.log(err);
 });
 
+server.on('ContentManagement.ContentType.publish', function(req){
+  console.log('ContentManagement.ContentType.publish');
+  request(options, callback);
+});
+
+server.on('ContentManagement.*', function(topic, req){
+  console.log('*: ' + topic);
+});
+
+server.listen(3000, function(){
+  console.log('Contentful webhook server running on port ' + 3000)
+});
+
+
+function callback(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var result = JSON.parse(body);
+    console.log(result)
+  }
+  else {
+    console.log(error)
+  }
+}
 

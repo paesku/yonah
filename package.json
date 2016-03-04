@@ -22,5 +22,9 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "contentful-webhook-server": "^1.2.0",
+    "request": "^2.69.0"
+  }
 }
