@@ -1,4 +1,7 @@
 // Create server with default options
+var express = require('express');
+var app = express();
+
 var request = require('request');
 var server = require('contentful-webhook-server')({
   path: '/',
@@ -7,14 +10,24 @@ var server = require('contentful-webhook-server')({
 });
 
 
-var options = {
+var werckerPostOption = {
   url: 'http://app.wercker.com/api/v3/builds/',
-  json: true,
-  body: {
-    'applicationId': '56d934359d5cf1b5731e6d1d'
+	method: 'POST',
+	headers: {
+		'content-type': 'application/x-www-form-urlencoded',
+		authorization: 'Bearer ' +
+		'04b73af5f9603b58552658d437353c3b0673cd0be79aa0f9bdbce129b0bd05a5'
+	},
+  form: {
+    applicationId: '56d7df8c1618a4fe2c02d7aa'
   }
 };
 
+var port = 3000;
+var msg = {
+	default: 'no info',
+	success: 'new build triggered'
+};
 
 server.on('ContentManagement.error', function(err, req){
   console.log(err);
@@ -30,21 +43,48 @@ server.on('ContentManagement.*', function(topic, req){
   triggerBuild();
 });
 
-server.listen(3000, function(){
-  console.log('Contentful webhook server running on port ' + 3000)
+server.listen(port, function(){
+  console.log('Contentful webhook server running on port ' + port)
+});
+
+app.set('port', (process.env.PORT || 5000));
+
+app.use(express.static(__dirname + '/public'));
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+app.get('/', function(request, response) {
+	triggerBuild();
+	renderView(request, response);
+});
+
+app.listen(app.get('port'), function() {
+	console.log('Node app is running on port', app.get('port'));
 });
 
 function triggerBuild() {
-  console.log('build triggered');
-  request(options, callback);
+  request(werckerPostOption, postCallback);
 }
 
-function callback(error, response, body) {
+function postCallback(error, response, body) {
+	var result;
+
   if (!error && response.statusCode == 200) {
-    var result = JSON.parse(body);
-    console.log(result)
-  }
-  else {
-    console.log(error)
+    result = JSON.parse(body);
+	  build = result;
+  } else {
+	  result = JSON.parse(error);
+	  build = 'err :' + result;
+    console.log('err: ' + result);
   }
 }
+
+function renderView(request, response) {
+	response.render('pages/index', {
+		port: port,
+		build: msg.default
+	});
+}
+

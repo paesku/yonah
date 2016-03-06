@@ -1,13 +1,15 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.1.5",
-  "description": "A sample Node.js app using Express 4",
+  "name": "yonah",
+  "version": "0.1.0",
+  "description": "Contentful - Wercker nodejs server for webhooks",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "contentful-webhook-server": "^1.2.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
     "request": "^2.69.0"
   },
   "engines": {
@@ -15,15 +17,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/paesku/yonah"
   },
   "keywords": [
     "node",
     "heroku",
-    "express"
+    "express",
+    "contentful",
+    "webhook",
+    "wercker"
   ],
   "license": "MIT",
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
