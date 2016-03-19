@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "contentful-webhook-server": "^1.2.0",
-    "ejs": "^2.4.1",
-    "express": "^4.13.4",
     "request": "^2.69.0"
   },
   "engines": {
@@ -22,14 +20,9 @@
   "keywords": [
     "node",
     "heroku",
-    "express",
     "contentful",
     "webhook",
     "wercker"
   ],
-  "license": "MIT",
-  "devDependencies": {
-    "koa": "^1.2.0",
-    "koa-bodyparser": "^2.0.1"
-  }
+  "license": "MIT"
 }
