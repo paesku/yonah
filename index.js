@@ -1,10 +1,7 @@
 // Create server with default options
-var express = require('express');
-var app = express();
-
 var request = require('request');
 var server = require('contentful-webhook-server')({
-	path: '/',
+	path: '/build',
 	username: 'user',
 	password: 'pass'
 });
@@ -30,7 +27,7 @@ var msg = {
 };
 
 server.on('ContentManagement.error', function(err, req){
-	console.log(err);
+	console.log('err', err);
 });
 
 server.on('ContentManagement.ContentType.publish', function(req){
@@ -47,27 +44,6 @@ server.listen(port, function(){
 	console.log('Contentful webhook server running on port ' + port)
 });
 
-app.set('port', (process.env.PORT || 5000));
-
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-app.get('/', function(request, response) {
-	triggerBuild();
-	var opt = {
-		port: port,
-		build: msg.success
-	};
-	renderView(response, opt);
-});
-app.listen(app.get('port'), function() {
-	console.log('Node app is running on port', app.get('port'));
-});
-
-
 function triggerBuild() {
 	request(werckerPostOption, postCallback);
 }
@@ -83,13 +59,4 @@ function postCallback(error, response, body) {
 		build = 'err :' + result;
 		console.log('err: ' + result);
 	}
-}
-
-function renderView(response, opt) {
-	var defaults = {
-		port: port,
-		build: msg.default
-	}
-	var options = defaults || opt;
-	response.render('pages/index', options);
 }
