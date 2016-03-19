@@ -28,5 +28,8 @@
     "wercker"
   ],
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "koa": "^1.2.0",
+    "koa-bodyparser": "^2.0.1"
+  }
 }
