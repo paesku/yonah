@@ -20,7 +20,7 @@ var werckerPostOption = {
 	}
 };
 
-var port = 3000;
+var port = process.env.PORT || 8080;
 var msg = {
 	default: 'no info',
 	success: 'new build triggered'
